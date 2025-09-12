@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hazmat Line Compliance Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #fff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* Header Styles */
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .header-icon {
+            margin-bottom: 16px;
+        }
+
+        .icon-box {
+            background-color: #FED700;
+            padding: 12px;
+            border-radius: 8px;
+            margin-right: 16px;
+        }
+
+        .phone-icon {
+            width: 32px;
+            height: 32px;
+            color: #0F4C81;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #0F4C81;
+            margin: 0;
+            font-family: 'Archivo Black', sans-serif;
+        }
+
+        .header p {
+            font-size: 1.125rem;
+            color: #6b7280;
+            max-width: 48rem;
+            margin: 0 auto;
+        }
+
+        /* Search Styles */
+        .search-container {
+            max-width: 28rem;
+            margin: 0 auto 48px auto;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px 12px 40px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: #0F4C81;
+            box-shadow: 0 0 0 3px rgba(15, 76, 129, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            color: #9ca3af;
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            margin-top: 4px;
+            z-index: 10;
+        }
+
+        .dropdown-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 16px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f3f4f6;
+        }
+
+        .dropdown-item:first-child {
+            border-radius: 8px 8px 0 0;
+        }
+
+        .dropdown-item:last-child {
+            border-radius: 0 0 8px 8px;
+        }
+
+        .dropdown-item .country-name {
+            font-weight: 500;
+        }
+
+        .dropdown-item .region {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        /* Country Grid */
+        .country-grid-section {
+            margin-bottom: 48px;
+        }
+
+        .country-grid-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 16px;
+            color: #374151;
+            font-family: 'Archivo Black', sans-serif;
+        }
+
+        .country-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        @media (min-width: 768px) {
+            .country-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .country-button {
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .country-button:hover {
+            border-color: #0F4C81;
+            background-color: #eff6ff;
+        }
+
+        .country-button .globe-icon {
+            width: 24px;
+            height: 24px;
+            margin: 0 auto 4px auto;
+            color: #0F4C81;
+        }
+
+        .country-button .country-name {
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        /* Results Styles */
+        .results {
+            display: none;
+        }
+
+        .results.active {
+            display: block;
+        }
+
+        .country-header {
+            background-color: #0F4C81;
+            color: white;
+            padding: 24px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .country-info h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 4px;
+            font-family: 'Archivo Black', sans-serif;
+        }
+
+        .country-region {
+            color: #93c5fd;
+        }
+
+        .risk-badge {
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border: 1px solid;
+        }
+
+        .risk-high {
+            background-color: #fef2f2;
+            border-color: #fca5a5;
+            color: #991b1b;
+        }
+
+        .risk-medium {
+            background-color: #fffbeb;
+            border-color: #fed7aa;
+            color: #92400e;
+        }
+
+        .risk-low {
+            background-color: #f0fdf4;
+            border-color: #86efac;
+            color: #166534;
+        }
+/* Requirements Explanations */
+.requirements-explanations {
+    margin-bottom: 32px;
+}
+
+.explanation-section {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 24px;
+    border-radius: 8px;
+}
+
+.explanation-header {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1e40af;
+    margin-bottom: 16px;
+    text-align: center;
+    font-family: 'Archivo Black', sans-serif;
+}
+
+.explanation-grid {
+    display: grid;
+    gap: 16px;
+}
+
+@media (min-width: 768px) {
+    .explanation-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+    }
+}
+
+.explanation-item {
+    background-color: white;
+    padding: 16px;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+}
+
+.explanation-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.explanation-text {
+    font-size: 0.875rem;
+    color: #6b7280;
+    line-height: 1.5;
+    margin: 0;
+}
+        .requirements-grid {
+            display: grid;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        @media (min-width: 768px) {
+            .requirements-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .requirement-box {
+            background-color: #f9fafb;
+            padding: 24px;
+            border-radius: 8px;
+        }
+
+        .requirement-header {
+            display: flex;
+            align-items: center;
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            font-family: 'Archivo Black', sans-serif;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .dot-blue {
+            background-color: #2563eb;
+        }
+
+        .dot-yellow {
+            background-color: #eab308;
+        }
+
+        .requirement-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .requirement-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .requirement-label {
+            color: #374151;
+        }
+
+        .requirement-value {
+            display: flex;
+            align-items: center;
+        }
+
+        .requirement-icon {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+        }
+
+        .icon-green {
+            color: #059669 !important;
+        }
+
+        .icon-gray {
+            color: #9ca3af !important;
+        }
+
+        .icon-yellow {
+            color: #d97706 !important;
+        }
+
+        .requirement-text {
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        /* Fines Section */
+        .fines-section {
+            background-color: #fef2f2;
+            border: 1px solid #fecaca;
+            padding: 24px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        .fines-header {
+            display: flex;
+            align-items: center;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #991b1b;
+            margin-bottom: 16px;
+        }
+
+        .fines-header svg {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+        }
+
+        .fines-grid {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .fine-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background-color: #fefefe;
+            border-radius: 6px;
+            border: 1px solid #f3f4f6;
+        }
+
+        .fine-type {
+            color: #374151;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .fine-amount {
+            font-weight: 600;
+            color: #991b1b;
+            font-size: 0.875rem;
+        }
+
+        .fines-disclaimer {
+            background-color: #fffbeb;
+            border: 1px solid #fed7aa;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 12px;
+        }
+
+        .fines-disclaimer-text {
+            font-size: 0.75rem;
+            color: #92400e;
+            font-style: italic;
+        }
+
+        /* Sources Section */
+        .sources-section {
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            padding: 24px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        .sources-header {
+            display: flex;
+            align-items: center;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #166534;
+            margin-bottom: 16px;
+        }
+
+        .sources-header svg {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+        }
+
+        .sources-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .source-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+        }
+
+        .source-name {
+            color: #374151;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .source-link {
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .source-link:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+
+        /* Legend Section */
+        .legend-section {
+            background-color: #eff6ff;
+            border: 1px solid #93c5fd;
+            padding: 24px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        .legend-header {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1e40af;
+            margin-bottom: 16px;
+        }
+
+        .legend-grid {
+            display: grid;
+            gap: 16px;
+            font-size: 0.875rem;
+        }
+
+        @media (min-width: 768px) {
+            .legend-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .legend-item svg {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+        }
+
+        .legend-description {
+            color: #6b7280;
+            margin-top: 12px;
+            font-size: 0.875rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background-color: #0F4C81;
+            color: white;
+            padding: 48px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .cta-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .cta-description {
+            color: #93c5fd;
+            margin-bottom: 24px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        @media (min-width: 640px) {
+            .cta-buttons {
+                flex-direction: row;
+            }
+        }
+
+        .btn-primary {
+            background-color: #FED700;
+            color: #0F4C81;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            background-color: #fde047;
+        }
+
+        .btn-secondary {
+            border: 1px solid white;
+            color: white;
+            background: transparent;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background-color: white;
+            color: #0F4C81;
+        }
+
+        .back-button {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .back-link {
+            color: #2563eb;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .back-link:hover {
+            color: #1d4ed8;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 48px;
+            padding-top: 32px;
+            border-top: 1px solid #e5e7eb;
+            text-align: center;
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .footer p {
+            margin-bottom: 8px;
+        }
+
+        .footer a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none;
+        }
+
+        .text-capitalize {
+            text-transform: capitalize;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-icon">
+                <h1>Hazmat Line Global Compliance Navigator</h1>
+            </div>
+            <p>Built from local regulatory research and Hazmat Line's industry expertise. This information is for guidance purposes only. Verify current requirements with local authorities for your specific shipments.</p>
+        </div>
+
+        <!-- Search Interface -->
+        <div class="search-container">
+            <div style="position: relative;">
+                <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                <input type="text" id="searchInput" class="search-input" placeholder="Search for a country..." />
+            </div>
+            <div id="dropdown" class="dropdown hidden"></div>
+        </div>
+
+        <!-- Country Grid -->
+        <div id="countryGrid" class="country-grid-section">
+            <h2 class="country-grid-title">Select a destination:</h2>
+            <div class="country-grid">
+                <button class="country-button" onclick="selectCountry('United States')">
+                    <svg class="globe-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="m12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                        <path d="M2 12h20"></path>
+                    </svg>
+                    <div class="country-name">United States</div>
+                </button>
+                <button class="country-button" onclick="selectCountry('Brazil')">
+                    <svg class="globe-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="m12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                        <path d="M2 12h20"></path>
+                    </svg>
+                    <div class="country-name">Brazil</div>
+                </button>
+                <button class="country-button" onclick="selectCountry('China')">
+                    <svg class="globe-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="m12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                        <path d="M2 12h20"></path>
+                    </svg>
+                    <div class="country-name">China</div>
+                </button>
+                <button class="country-button" onclick="selectCountry('European Union')">
+                    <svg class="globe-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="m12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                        <path d="M2 12h20"></path>
+                    </svg>
+                    <div class="country-name">European Union</div>
+                </button>
+                <button class="country-button" onclick="selectCountry('United Kingdom')">
+                    <svg class="globe-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="m12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                        <path d="M2 12h20"></path>
+                    </svg>
+                    <div class="country-name">United Kingdom</div>
+                </button>
+                <button class="country-button" onclick="selectCountry('Canada')">
+                    <svg class="globe-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="m12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                        <path d="M2 12h20"></path>
+                    </svg>
+                    <div class="country-name">Canada</div>
+                </button>
+                <button class="country-button" onclick="selectCountry('Australia')">
+                    <svg class="globe-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="m12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                        <path d="M2 12h20"></path>
+                    </svg>
+                    <div class="country-name">Australia</div>
+                </button>
+                <button class="country-button" onclick="selectCountry('Singapore')">
+                    <svg class="globe-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="m12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                        <path d="M2 12h20"></path>
+                    </svg>
+                    <div class="country-name">Singapore</div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="results" class="results">
+            <!-- Country Header -->
+            <div class="country-header">
+                <div class="country-info">
+                    <h2 id="selectedCountryName"></h2>
+                    <div id="selectedCountryRegion" class="country-region"></div>
+                </div>
+                <div id="riskBadge" class="risk-badge"></div>
+            </div>
+            <!-- Requirements Explanations -->
+        <div class="requirements-explanations">
+            <div class="explanation-section">
+                <h3 class="explanation-header">Understanding the Requirements</h3>
+                <div class="explanation-grid">
+                    <div class="explanation-item">
+                        <h4 class="explanation-title">Transport</h4>
+                        <p class="explanation-text">Requirements on shipping documents and vehicle placards for hazmat in transit.</p>
+                    </div>
+                    <div class="explanation-item">
+                        <h4 class="explanation-title">Supply</h4>
+                        <p class="explanation-text">Emergency numbers on Safety Data Sheets and product labels for chemical products.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <!-- Requirements Grid -->
+            <div class="requirements-grid">
+                <!-- Transport Requirements -->
+                <div class="requirement-box">
+                    <h3 class="requirement-header">
+                        <div class="dot dot-blue"></div>
+                        Transport
+                    </h3>
+                    <div class="requirement-item">
+                        <span class="requirement-label">Emergency Number Required</span>
+                        <div class="requirement-value">
+                            <svg id="transportEmergencyIcon" class="requirement-icon"></svg>
+                            <span id="transportEmergencyText" class="requirement-text"></span>
+                        </div>
+                    </div>
+                    <div class="requirement-item">
+                        <span class="requirement-label">Local Number Required</span>
+                        <div class="requirement-value">
+                            <svg id="transportLocalIcon" class="requirement-icon"></svg>
+                            <span id="transportLocalText" class="requirement-text"></span>
+                        </div>
+                    </div>
+                    <div class="requirement-item">
+                        <span class="requirement-label">Local Language Response</span>
+                        <div class="requirement-value">
+                            <svg id="transportLanguageIcon" class="requirement-icon"></svg>
+                            <span id="transportLanguageText" class="requirement-text"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Supply Requirements -->
+                <div class="requirement-box">
+                    <h3 class="requirement-header">
+                        <div class="dot dot-yellow"></div>
+                        Supply
+                    </h3>
+                    <div class="requirement-item">
+                        <span class="requirement-label">Emergency Number Required</span>
+                        <div class="requirement-value">
+                            <svg id="supplyEmergencyIcon" class="requirement-icon"></svg>
+                            <span id="supplyEmergencyText" class="requirement-text"></span>
+                        </div>
+                    </div>
+                    <div class="requirement-item">
+                        <span class="requirement-label">Local Number Required</span>
+                        <div class="requirement-value">
+                            <svg id="supplyLocalIcon" class="requirement-icon"></svg>
+                            <span id="supplyLocalText" class="requirement-text"></span>
+                        </div>
+                    </div>
+                    <div class="requirement-item">
+                        <span class="requirement-label">Local Language Response</span>
+                        <div class="requirement-value">
+                            <svg id="supplyLanguageIcon" class="requirement-icon"></svg>
+                            <span id="supplyLanguageText" class="requirement-text"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fines Section -->
+            <div class="fines-section">
+                <h3 class="fines-header">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                    </svg>
+                    Potential Fines & Penalties
+                </h3>
+                <div class="fines-grid">
+                    <div class="fine-item">
+                        <span class="fine-type">Missing Emergency Phone Number</span>
+                        <span id="finesMissing" class="fine-amount">Not Available</span>
+                    </div>
+                    <div class="fine-item">
+                        <span class="fine-type">Non-Monitored Phone Number</span>
+                        <span id="finesNonMonitored" class="fine-amount">Not Available</span>
+                    </div>
+                    <div class="fine-item">
+                        <span class="fine-type">Inadequate Phone Service</span>
+                        <span id="finesInadequate" class="fine-amount">Not Available</span>
+                    </div>
+                    <div class="fine-item">
+                        <span class="fine-type">Incorrect Emergency Response Information</span>
+                        <span id="finesIncorrect" class="fine-amount">Not Available</span>
+                    </div>
+                </div>
+                <div id="finesDisclaimer" class="fines-disclaimer hidden">
+                    <p class="fines-disclaimer-text">Additional disclaimer text will appear here when needed for specific countries.</p>
+                </div>
+            </div>
+
+            <!-- Sources Section -->
+            <div class="sources-section">
+                <h3 class="sources-header">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    Official Sources & References
+                </h3>
+                <div id="sourcesList" class="sources-list">
+                    <!-- Sources will be populated dynamically -->
+                </div>
+            </div>
+
+            <!-- Legend Section -->
+            <div class="legend-section">
+                <h3 class="legend-header">Understanding the Requirements</h3>
+                <div class="legend-grid">
+                    <div class="legend-item">
+                        <svg class="icon-green" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span><strong>Yes:</strong> Required by regulation</span>
+                    </div>
+                    <div class="legend-item">
+                        <svg class="icon-gray" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span><strong>No:</strong> Not required by regulation</span>
+                    </div>
+                    <div class="legend-item">
+                        <svg class="icon-yellow" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span><strong>IE:</strong> Industry Expectation</span>
+                    </div>
+                </div>
+                <p class="legend-description">
+                    "IE" indicates where regulations don't explicitly require something, but it's expected as standard industry practice.
+                </p>
+            </div>
+
+           <!-- Call to Action -->
+<div class="cta-section">
+    <h3 class="cta-title">Turn Hazmat Compliance Into a Competitive Advantage</h3>
+    <p class="cta-description">
+        Get 24-hour emergency phone service with native-speaking hazmat experts, reduce costs through vetted cleanup negotiation, benefit from flexible billing, and replace multiple hotlines with one global solution.
+    </p>
+    <div class="cta-buttons">
+        <a href="https://www.hazmatline.com/pages/registration-sign-up" class="btn-primary" target="_blank">Sign Up Now</a>
+        <a href="https://www.hazmatline.com/pages/pricing" class="btn-secondary" target="_blank">See Our Prices</a>
+    </div>
+</div>
+            <!-- Back Button -->
+            <div class="back-button">
+                <a href="#" class="back-link" onclick="goBack()">← Check Another Country</a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>Database Updates:</strong> We're continuously expanding our database with new countries each month. If you don't see your destination or need additional information, check back next month for updates.</p>
+            <p><strong>Legal Disclaimer:</strong> The regulatory information and interpretations provided by Hazmat Line are believed to be accurate at the time of publication, but Hazmat Line makes no warranties or guarantees regarding the accuracy of the information provided and accepts no liability for any inaccuracies or improper reliance. Fine amounts are estimates that may vary by jurisdiction, circumstances, and regulatory updates. This document does not constitute legal advice, and each user should retain counsel of their own choosing and consult with qualified regulatory experts or official government agencies before relying on any information contained herein. Users remain solely responsible for ensuring compliance with all applicable laws and regulations.</p>
+        </div>
+    </div>
+
+    <script>
+        // Country data with standardized fines structure
+        const countryData = {
+            'Argentina': {
+                region: 'Americas',
+                transport: { emergencyRequired: 'Y', localNumber: 'IE', localLanguage: 'IE' },
+                supply: { emergencyRequired: 'Y', localNumber: 'N', localLanguage: 'IE' },
+                fines: { 
+                    missing: 'Not Available',
+                    nonMonitored: 'Not Available',
+                    inadequate: '$2,000 - $20,000 USD equivalent',
+                    incorrect: 'Not Available'
+                },
+                sources: [
+                     { name: 'Argentine Ministry of Transport', url: 'https://www.argentina.gob.ar/transporte' },
+                ],
+                severity: 'medium'
+            },
+            'Australia': {
+                region: 'Asia Pacific',
+                transport: { emergencyRequired: 'Y', localNumber: 'Y', localLanguage: 'IE' },
+                supply: { emergencyRequired: 'Y', localNumber: 'Y', localLanguage: 'Y' },
+                fines: { 
+                    missing: 'AUD $10,000 - $200,000',
+                    nonMonitored: 'AUD $2,000 - $20,000',
+                    inadequate: 'AUD $5,000 - $50,000',
+                    incorrect: 'AUD $2,000 - $20,000'
+                },
+                sources: [
+                    { name: 'Australian Transport Safety Bureau', url: 'https://www.atsb.gov.au/' }
+                ],
+                severity: 'medium'
+            },
+            'Brazil': {
+                region: 'Americas',
+                transport: { emergencyRequired: 'Y', localNumber: 'IE', localLanguage: 'Y' },
+                supply: { emergencyRequired: 'Y', localNumber: 'Y', localLanguage: 'IE' },
+                fines: { 
+                    missing: 'R$ 5,500',
+                    nonMonitored: 'R$ 1,400 - R$ 5,000',
+                    inadequate: 'R$ 1,000 - R$ 1,400',
+                    incorrect: 'R$ 600 - R$ 1,400'
+                },
+                sources: [
+                    { name: 'Âmbito Jurídico - Infrações no transporte de Produtos Perigosos', url: 'https://ambitojuridico.com.br/quais-os-valores-das-infracoes-no-transporte-de-produtos-perigosos/#Infracoes_graves' },
+                    { name: 'AGÊNCIA NACIONAL DE TRANSPORTES TERRESTRES', url: 'https://anttlegis.antt.gov.br/action/TematicaAction.php?acao=abrirVinculos&cotematica=19914024&cod_menu=7220&cod_modulo=392' }
+                ],
+                disclaimer: 'ANTT Resolution 5,998/2022 establishes four violation categories with specific penalty amounts based on infraction severity. Fine estimates are based on these regulatory guidelines. Repeat offenders may face 25% surcharges.',
+                severity: 'high'
+            },
+            'Canada': {
+                region: 'Americas',
+                transport: { emergencyRequired: 'Y', localNumber: 'N', localLanguage: 'Y' },
+                supply: { emergencyRequired: 'Y', localNumber: 'N', localLanguage: 'N' },
+                fines: { 
+                    missing: 'CAD $25,000 - $250,000',
+                    nonMonitored: 'CAD $5,000 - $50,000',
+                    inadequate: 'CAD $10,000 - $100,000',
+                    incorrect: 'CAD $5,000 - $25,000'
+                },
+                sources: [
+                    { name: 'Transport Canada - Dangerous Goods', url: 'https://tc.canada.ca/en/dangerous-goods' },
+                ],
+                severity: 'medium'
+            },
+            'Chile': {
+                region: 'Americas',
+                transport: { emergencyRequired: 'IE', localNumber: 'N', localLanguage: 'IE' },
+                supply: { emergencyRequired: 'Y', localNumber: 'Y', localLanguage: 'IE' },
+                fines: { 
+                    missing: 'Not Available',
+                    nonMonitored: 'Not Available',
+                    inadequate: '$1,500 - $15,000 USD equivalent',
+                    incorrect: 'Not Available'
+                },
+                sources: [
+                    { name: 'Chilean Ministry of Transport', url: 'https://www.mtt.gob.cl/' }
+                ],
+                severity: 'low'
+            },
+            'China': {
+                region: 'Asia Pacific',
+                transport: { emergencyRequired: 'Y', localNumber: 'IE', localLanguage: 'IE' },
+                supply: { emergencyRequired: 'Y', localNumber: 'Y', localLanguage: 'Y' },
+                fines: { 
+                    missing: '¥50,000 - ¥500,000',
+                    nonMonitored: '¥10,000 - ¥100,000',
+                    inadequate: '¥20,000 - ¥200,000',
+                    incorrect: '¥10,000 - ¥100,000'
+                },
+                sources: [
+                    { name: 'Ministry of Emergency Management', url: 'https://www.mem.gov.cn/' },
+                ],
+                disclaimer: 'Shipment rejection at customs is common for non-compliance. Criminal penalties may apply for serious violations.',
+                severity: 'high'
+            },
+            'Colombia': {
+                region: 'Americas',
+                transport: { emergencyRequired: 'Y', localNumber: 'N', localLanguage: 'IE' },
+                supply: { emergencyRequired: 'Y', localNumber: 'Y', localLanguage: 'IE' },
+                fines: { 
+                    missing: 'Not Available',
+                    nonMonitored: 'Not Available',
+                    inadequate: '$2,000 - $25,000 USD equivalent',
+                    incorrect: 'Not Available'
+                },
+                sources: [
+                    { name: 'Ministry of Transport Colombia', url: 'https://www.mintransporte.gov.co/' },
+                ],
+                severity: 'medium'
+            },
+            'European Union': {
+                region: 'Europe',
+                transport: { emergencyRequired: 'Y', localNumber: 'N', localLanguage: 'N' },
+                supply: { emergencyRequired: 'Y', localNumber: 'N', localLanguage: 'Y' },
+                fines: { 
+                    missing: '€1,000 - €30,000',
+                    nonMonitored: '€500 - €15,000',
+                    inadequate: '€1,000 - €25,000',
+                    incorrect: '€500 - €10,000'
+                },
+                sources: [
+                    { name: 'European Chemicals Agency (ECHA)', url: 'https://echa.europa.eu/' },
+                    { name: 'EU Transport - Dangerous Goods', url: 'https://transport.ec.europa.eu/transport-themes/dangerous-goods_en' }
+                ],
+                disclaimer: 'Penalties vary significantly by member state. Some countries may impose additional national penalties.',
+                severity: 'medium'
+            },
+            'India': {
+                region: 'Asia Pacific',
+                transport: { emergencyRequired: 'Y', localNumber: 'N', localLanguage: 'N' },
+                supply: { emergencyRequired: 'Y', localNumber: 'N', localLanguage: 'IE' },
+                fines: { 
+                    missing: 'Not Available',
+                    nonMonitored: 'Not Available',
+                    inadequate: '₹50,000 - ₹500,000',
+                    incorrect: 'Not Available'
+                },
+                sources: [
+                    { name: 'Ministry of Road Transport & Highways', url: 'https://morth.nic.in/' },
+                ],
+                severity: 'low'
+            },
+            'Indonesia': {
+                region: 'Asia Pacific',
+                transport: { emergencyRequired: 'IE', localNumber: 'N', localLanguage: 'N' },
+                supply: { emergencyRequired: 'Y', localNumber: 'N', localLanguage: 'IE' },
+                fines: { 
+                    missing: 'Not Available',
+                    nonMonitored: 'Not Available',
+                    inadequate: '$1,000 - $10,000 USD equivalent',
+                    incorrect: 'Not Available'
+                },
+                sources: [
+                    { name: 'Ministry of Transportation Indonesia', url: 'http://dephub.go.id/' },
+                ],
+                severity: 'low'
+            },
+            'Japan': {
+                region: 'Asia Pacific',
+                transport: { emergencyRequired: 'Y', localNumber: 'IE', localLanguage: 'IE' },
+                supply: { emergencyRequired: 'Y', localNumber: 'IE', localLanguage: 'IE' },
+                fines: { 
+                    missing: '¥500,000 - ¥5,000,000',
+                    nonMonitored: '¥50,000 - ¥1,000,000',
+                    inadequate: '¥100,000 - ¥2,000,000',
+                    incorrect: '¥50,000 - ¥1,000,000'
+                },
+                sources: [
+                    { name: 'Ministry of Land, Infrastructure, Transport', url: 'https://www.mlit.go.jp/en/' }
+                ],
+                disclaimer: 'Criminal penalties including imprisonment may apply for serious violations.',
+                severity: 'medium'
+            },
+            'Malaysia': {
+                region: 'Asia Pacific',
+                transport: { emergencyRequired: 'Y', localNumber: 'N', localLanguage: 'IE' },
+                supply: { emergencyRequired: 'Y', localNumber: 'N', localLanguage: 'IE' },
+                fines: { 
+                    missing: 'Not Available',
+                    nonMonitored: 'Not Available',
+                    inadequate: 'RM 5,000 - RM 50,000',
+                    incorrect: 'Not Available'
+                },
+                sources: [
+                    { name: 'Ministry of Transport Malaysia', url: 'https://www.mot.gov.my/' },
+                ],
+                severity: 'low'
+            },
+            'Mexico': {
+                region: 'Americas',
+                transport: { emergencyRequired: 'Y', localNumber: 'Y', localLanguage: 'IE' },
+                supply: { emergencyRequired: 'Y', localNumber: 'Y', localLanguage: 'IE' },
+                fines: { 
+                    missing: '$200,000 - $2,000,000 MXN',
+                    nonMonitored: '$50,000 - $500,000 MXN',
+                    inadequate: '$100,000 - $1,000,000 MXN',
+                    incorrect: '$50,000 - $500,000 MXN'
+                },
+                sources: [
+                    { name: 'SCT - Ministry of Communications and Transport', url: 'https://www.gob.mx/sct' },
+                ],
+                severity: 'medium'
+            },
+            'New Zealand': {
+                region: 'Asia Pacific',
+                transport: { emergencyRequired: 'Y', localNumber: 'N', localLanguage: 'IE' },
+                supply: { emergencyRequired: 'Y', localNumber: 'Y', localLanguage: 'Y' },
+                fines: { 
+                    missing: 'Not Available',
+                    nonMonitored: 'Not Available',
+                    inadequate: 'NZ$ 3,000 - NZ$ 30,000',
+                    incorrect: 'Not Available'
+                },
+                sources: [
+                    { name: 'New Zealand Transport Agency Waka Kotahi', url: 'https://www.nzta.govt.nz/' },
+                ],
+                severity: 'medium'
+            },
+            'Peru': {
+                region: 'Americas',
+                transport: { emergencyRequired: 'Y', localNumber: 'Y', localLanguage: 'IE' },
+                supply: { emergencyRequired: 'Y', localNumber: 'Y', localLanguage: 'IE' },
+                fines: { 
+                    missing: 'Not Available',
+                    nonMonitored: 'Not Available',
+                    inadequate: '$2,000 - $20,000 USD equivalent',
+                    incorrect: 'Not Available'
+                },
+                sources: [
+                    { name: 'Ministry of Transport and Communications', url: 'https://www.gob.pe/mtc' },
+                ],
+                severity: 'medium'
+            },
+            'Philippines': {
+                region: 'Asia Pacific',
+                transport: { emergencyRequired: 'Y', localNumber: 'N', localLanguage: 'N' },
+                supply: { emergencyRequired: 'Y', localNumber: 'Y', localLanguage: 'IE' },
+                fines: { 
+                    missing: 'Not Available',
+                    nonMonitored: 'Not Available',
+                    inadequate: '₱100,000 - ₱1,000,000',
+                    incorrect: 'Not Available'
+                },
+                sources: [
+                    { name: 'Department of Transportation', url: 'https://dotr.gov.ph/' },
+                ],
+                severity: 'medium'
+            },
+            'Singapore': {
+                region: 'Asia Pacific',
+                transport: { emergencyRequired: 'Y', localNumber: 'Y', localLanguage: 'Y' },
+                supply: { emergencyRequired: 'Y', localNumber: 'Y', localLanguage: 'IE' },
+                fines: { 
+                    missing: 'S$20,000 - S$200,000',
+                    nonMonitored: 'S$5,000 - S$50,000',
+                    inadequate: 'S$10,000 - S$100,000',
+                    incorrect: 'S$5,000 - S$50,000'
+                },
+                sources: [
+                    { name: 'Land Transport Authority', url: 'https://www.lta.gov.sg/' },
+                ],
+                severity: 'high'
+            },
+            'South Africa': {
+                region: 'Africa',
+                transport: { emergencyRequired: 'Y', localNumber: 'Y', localLanguage: 'N' },
+                supply: { emergencyRequired: 'Y', localNumber: 'N', localLanguage: 'N' },
+                fines: { 
+                    missing: 'Not Available',
+                    nonMonitored: 'Not Available',
+                    inadequate: 'R 10,000 - R 100,000',
+                    incorrect: 'Not Available'
+                },
+                sources: [
+                    { name: 'Department of Transport', url: 'https://www.transport.gov.za/' },
+                ],
+                severity: 'medium'
+            },
+            'South Korea': {
+                region: 'Asia Pacific',
+                transport: { emergencyRequired: 'IE', localNumber: 'N', localLanguage: 'N' },
+                supply: { emergencyRequired: 'Y', localNumber: 'Y', localLanguage: 'Y' },
+                fines: { 
+                    missing: 'Not Available',
+                    nonMonitored: 'Not Available',
+                    inadequate: '₩5,000,000 - ₩50,000,000',
+                    incorrect: 'Not Available'
+                },
+                sources: [
+                     { name: 'Korea Transportation Safety Authority', url: 'https://www.kotsa.or.kr/' },
+                ],
+                severity: 'medium'
+            },
+            'Taiwan': {
+                region: 'Asia Pacific',
+                transport: { emergencyRequired: 'Y', localNumber: 'N', localLanguage: 'N' },
+                supply: { emergencyRequired: 'Y', localNumber: 'N', localLanguage: 'IE' },
+                fines: { 
+                    missing: 'Not Available',
+                    nonMonitored: 'Not Available',
+                    inadequate: 'NT$ 50,000 - NT$ 500,000',
+                    incorrect: 'Not Available'
+                },
+                sources: [
+                    { name: 'Ministry of Transportation', url: 'https://www.motc.gov.tw/' }
+                ],
+                severity: 'low'
+            },
+            'Thailand': {
+                region: 'Asia Pacific',
+                transport: { emergencyRequired: 'IE', localNumber: 'N', localLanguage: 'N' },
+                supply: { emergencyRequired: 'Y', localNumber: 'N', localLanguage: 'IE' },
+                fines: { 
+                    missing: 'Not Available',
+                    nonMonitored: 'Not Available',
+                    inadequate: '฿50,000 - ฿500,000',
+                    incorrect: 'Not Available'
+                },
+                sources: [
+                    { name: 'Department of Land Transport', url: 'https://www.dlt.go.th/' },
+                ],
+                severity: 'low'
+            },
+            'United Kingdom': {
+                region: 'Europe',
+                transport: { emergencyRequired: 'Y', localNumber: 'N', localLanguage: 'Y' },
+                supply: { emergencyRequired: 'Y', localNumber: 'N', localLanguage: 'Y' },
+                fines: { 
+                    missing: '£5,000 - £50,000',
+                    nonMonitored: '£300 - £5,000',
+                    inadequate: '£1,000 - £20,000',
+                    incorrect: '£500 - £10,000'
+                },
+                sources: [
+                     { name: 'Health and Safety Executive', url: 'https://www.hse.gov.uk/' },
+                ],
+                disclaimer: 'Corporate penalties can be unlimited for serious offenses. Prison sentences may apply for directors in severe cases.',
+                severity: 'medium'
+            },
+            'United States': {
+                region: 'Americas',
+                transport: { emergencyRequired: 'Y', localNumber: 'IE', localLanguage: 'IE' },
+                supply: { emergencyRequired: 'Y', localNumber: 'Y', localLanguage: 'IE' },
+                fines: { 
+                    missing: '$4,000 - $7,500',
+                    nonMonitored: '$1,600 - $4,000',
+                    inadequate: '$3,200 - $5,200',
+                    incorrect: '$3,700 - $7,500'
+                },
+                sources: [
+                    { name: 'Federal Register', url: 'https://www.federalregister.gov/documents/2013/10/02/2013-23887/hazardous-materials-regulations-penalty-guidelines' },
+                    { name: 'Civil Penalties Tables', url: 'https://railroads.dot.gov/sites/fra.dot.gov/files/2024-05/Civil%20Penalties%20Tables%202024May.pdf' }
+                ],
+                severity: 'high'
+            }
+        };
+
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const dropdown = document.getElementById('dropdown');
+        const countryGrid = document.getElementById('countryGrid');
+        const results = document.getElementById('results');
+
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            
+            if (searchTerm.length === 0) {
+                dropdown.classList.add('hidden');
+                return;
+            }
+
+            const filteredCountries = Object.keys(countryData).filter(country => 
+                country.toLowerCase().includes(searchTerm)
+            );
+
+            if (filteredCountries.length > 0) {
+                dropdown.innerHTML = filteredCountries.slice(0, 8).map(country => `
+                    <button class="dropdown-item" onclick="selectCountry('${country}')">
+                        <span class="country-name">${country}</span>
+                        <span class="region">${countryData[country].region}</span>
+                    </button>
+                `).join('');
+                dropdown.classList.remove('hidden');
+            } else {
+                dropdown.classList.add('hidden');
+            }
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!searchInput.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+
+        function selectCountry(countryName) {
+            const country = countryData[countryName];
+            if (!country) return;
+
+            // Hide search and grid
+            countryGrid.style.display = 'none';
+            searchInput.value = '';
+            dropdown.classList.add('hidden');
+
+            // Show results
+            results.classList.add('active');
+
+            // Update country header
+            document.getElementById('selectedCountryName').textContent = countryName;
+            document.getElementById('selectedCountryRegion').textContent = country.region;
+            
+            const riskBadge = document.getElementById('riskBadge');
+            riskBadge.textContent = country.severity.toUpperCase() + ' RISK';
+            riskBadge.className = 'risk-badge risk-' + country.severity;
+
+            // Update transport requirements
+            console.log('Transport Emergency:', country.transport.emergencyRequired);
+            updateRequirement('transportEmergency', country.transport.emergencyRequired);
+            console.log('Transport Local:', country.transport.localNumber);
+            updateRequirement('transportLocal', country.transport.localNumber); 
+            console.log('Transport Language:', country.transport.localLanguage);
+            updateRequirement('transportLanguage', country.transport.localLanguage);
+
+            // Update supply requirements
+            console.log('Supply Emergency:', country.supply.emergencyRequired);
+            updateRequirement('supplyEmergency', country.supply.emergencyRequired);
+            console.log('Supply Local:', country.supply.localNumber);
+            updateRequirement('supplyLocal', country.supply.localNumber);
+            console.log('Supply Language:', country.supply.localLanguage);
+            updateRequirement('supplyLanguage', country.supply.localLanguage);
+
+            // Update standardized fines
+           const countriesWithVerifiedFines = ['Brazil', 'United States'];
+
+if (countriesWithVerifiedFines.includes(countryName)) {
+    // Show actual fines data
+    document.getElementById('finesMissing').textContent = country.fines.missing;
+    document.getElementById('finesNonMonitored').textContent = country.fines.nonMonitored;
+    document.getElementById('finesInadequate').textContent = country.fines.inadequate;
+    document.getElementById('finesIncorrect').textContent = country.fines.incorrect;
+} else {
+    // Show "information not available" message for all others
+    document.getElementById('finesMissing').textContent = 'Information not yet available';
+    document.getElementById('finesNonMonitored').textContent = 'Information not yet available';
+    document.getElementById('finesInadequate').textContent = 'Information not yet available';
+    document.getElementById('finesIncorrect').textContent = 'Information not yet available';
+}
+            // Update fines disclaimer
+            const disclaimerDiv = document.getElementById('finesDisclaimer');
+            if (country.disclaimer) {
+                disclaimerDiv.querySelector('.fines-disclaimer-text').textContent = country.disclaimer;
+                disclaimerDiv.classList.remove('hidden');
+            } else {
+                disclaimerDiv.classList.add('hidden');
+            }
+
+            // Update sources
+            const sourcesList = document.getElementById('sourcesList');
+            sourcesList.innerHTML = country.sources.map(source => `
+                <div class="source-item">
+                    <span class="source-name">${source.name}</span>
+                    <a href="${source.url}" class="source-link" target="_blank" rel="noopener">Visit Source</a>
+                </div>
+            `).join('');
+
+            // Scroll to results
+            results.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function updateRequirement(prefix, value) {
+    const icon = document.getElementById(prefix + 'Icon');
+    const text = document.getElementById(prefix + 'Text');
+    
+    // Completely rebuild the SVG element
+    icon.outerHTML = `<svg id="${prefix}Icon" class="requirement-icon" fill="currentColor" viewBox="0 0 20 20"></svg>`;
+    
+    // Get the fresh element reference
+    const freshIcon = document.getElementById(prefix + 'Icon');
+    
+    // Apply styling based on value
+    switch(value) {
+        case 'Y':
+            freshIcon.classList.add('icon-green');
+            freshIcon.innerHTML = '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>';
+            text.textContent = 'Yes - Required';
+            break;
+        case 'N':
+            freshIcon.classList.add('icon-gray');
+            freshIcon.innerHTML = '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>';
+            text.textContent = 'No - Not Required';
+            break;
+        case 'IE':
+            freshIcon.classList.add('icon-yellow');
+            freshIcon.innerHTML = '<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>';
+            text.textContent = 'Industry Expectation';
+            break;
+    }
+}
+
+        function goBack() {
+    results.classList.remove('active');
+    countryGrid.style.display = 'block';
+    
+    // Force complete reset of all requirement elements
+    const prefixes = ['transportEmergency', 'transportLocal', 'transportLanguage', 'supplyEmergency', 'supplyLocal', 'supplyLanguage'];
+    
+    prefixes.forEach(prefix => {
+        const icon = document.getElementById(prefix + 'Icon');
+        const text = document.getElementById(prefix + 'Text');
+        
+        if (icon) {
+            // Completely rebuild the icon element
+            icon.outerHTML = `<svg id="${prefix}Icon" class="requirement-icon"></svg>`;
+        }
+        
+        if (text) {
+            // Clear text content
+            text.textContent = '';
+        }
+    });
+}
+    </script>
+</body>
+</html>
