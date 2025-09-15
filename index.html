@@ -253,6 +253,61 @@
             border-color: #86efac;
             color: #166534;
         }
+/* Requirements Explanations */
+.requirements-explanations {
+    margin-bottom: 32px;
+}
+
+.explanation-section {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 24px;
+    border-radius: 8px;
+}
+
+.explanation-header {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1e40af;
+    margin-bottom: 16px;
+    text-align: center;
+    font-family: 'Archivo Black', sans-serif;
+}
+
+.explanation-grid {
+    display: grid;
+    gap: 16px;
+}
+
+@media (min-width: 768px) {
+    .explanation-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+    }
+}
+
+.explanation-item {
+    background-color: white;
+    padding: 16px;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+}
+
+.explanation-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.explanation-text {
+    font-size: 0.875rem;
+    color: #6b7280;
+    line-height: 1.5;
+    margin: 0;
+}
         .requirements-grid {
             display: grid;
             gap: 24px;
@@ -523,16 +578,7 @@
             color: #93c5fd;
             margin-bottom: 24px;
         }
-        
-        .requirements-section-title {
-        font-size: 1.25rem;
-        font-weight: 600;
-        color: #374151;
-        text-align: center;
-        margin-bottom: 24px;
-        font-family: 'Archivo Black', sans-serif;
-        }
-        
+
         .cta-buttons {
             display: flex;
             flex-direction: column;
@@ -729,13 +775,23 @@
                 </div>
                 <div id="riskBadge" class="risk-badge"></div>
             </div>
+            <!-- Requirements Explanations -->
+        <div class="requirements-explanations">
+            <div class="explanation-section">
+                <h3 class="explanation-header">Understanding the Requirements</h3>
+                <div class="explanation-grid">
+                    <div class="explanation-item">
+                        <h4 class="explanation-title">Transport</h4>
+                        <p class="explanation-text">Requirements on shipping documents and vehicle placards for hazmat in transit.</p>
+                    </div>
+                    <div class="explanation-item">
+                        <h4 class="explanation-title">Supply</h4>
+                        <p class="explanation-text">Emergency numbers on Safety Data Sheets and product labels for chemical products.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
             <!-- Requirements Grid -->
-            <!-- Requirements Section Title -->
-<h3 class="requirements-section-title">Understanding the Requirements</h3>
-<!-- Requirements Grid -->
-<div class="requirements-grid">
-    <!-- Transport Requirements -->
-    <div class="requirement-box">
             <div class="requirements-grid">
                 <!-- Transport Requirements -->
                 <div class="requirement-box">
